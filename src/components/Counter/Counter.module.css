@@ -1,9 +1,0 @@
-.counter {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px;
-  border: 3px solid #159115;
-  border-radius: 5px;
-}

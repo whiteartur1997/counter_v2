@@ -2,7 +2,10 @@ import React from 'react';
 import s from './Display.module.css';
 
 type DisplayType = {
-  displayValue: string
+  displayValue?: number
+  maxValue?: number
+  minValue?: number
+  
 }
 
 export const Display = (props: DisplayType) => {
