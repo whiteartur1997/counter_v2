@@ -3,13 +3,21 @@ import s from './Button.module.css';
 
 type ButtonType = {
   descr: string
-  onClick: () => void
+  disabled: boolean
+  onClickHandler: () => void
+  error: boolean
 }
 
 export const Button = (props: ButtonType) => {
-  return <button 
+
+  const onClickHandler = () => {
+    props.onClickHandler();
+  }
+
+  return <button
+    disabled={props.error || props.disabled}
     className={s.button}
-    onClick={props.onClick}>
+    onClick={onClickHandler}>
       {props.descr}
     </button>
 }
