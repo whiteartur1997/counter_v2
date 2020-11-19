@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import './App.css';
-import {Counter} from "./components/Counter/Counter";
+import { Counter } from "./components/Counter/Counter";
 
 type BtnsType = {
     [key: string]: BtnType
@@ -12,28 +12,30 @@ export type BtnType = {
 }
 
 function App() {
-    const [maxValue, setMaxValue] = useState<number>(5);
-    const [minValue, setMinValue] = useState<number>(0);
+    const [maxValue, setMaxValue] = useState<number>(Number(localStorage.getItem("maxValue")) | 5);
+    const [minValue, setMinValue] = useState<number>(Number(localStorage.getItem("minValue")) | 0);
     const [displayValue, setDisplayValue] = useState<number | string>(minValue);
     const [settingsMode, setSettingsMode] = useState<boolean>(false);
     const error = minValue >= maxValue || minValue < 0;
 
-    const btns:BtnsType = {
-        setBtn: {descr: "set", callback: setValues, disabled: !settingsMode},
-        incBtn: {descr: "inc", callback: incDisplayValue, disabled: settingsMode ||  maxValue === displayValue},
-        resetBtn: {descr: "reset", callback: resetDisplayValue, disabled: settingsMode || minValue === displayValue},
+    const btns: BtnsType = {
+        setBtn: { descr: "set", callback: setValues, disabled: !settingsMode },
+        incBtn: { descr: "inc", callback: incDisplayValue, disabled: settingsMode || maxValue === displayValue },
+        resetBtn: { descr: "reset", callback: resetDisplayValue, disabled: settingsMode || minValue === displayValue },
     }
 
 
     function changeMaxValue(value: number) {
         setSettingsMode(true);
         setMaxValue(value);
+        localStorage.setItem("maxValue", String(value));
     }
 
     function changeMinValue(value: number) {
         setSettingsMode(true)
         setMinValue(value);
         setDisplayValue(value);
+        localStorage.setItem("minValue", String(value));
     }
 
     function setValues() {
@@ -42,7 +44,7 @@ function App() {
 
     function incDisplayValue() {
         const newValue = Number(displayValue) + 1;
-        if(newValue <= maxValue) {
+        if (newValue <= maxValue) {
             setDisplayValue(newValue);
         }
     }
@@ -60,13 +62,13 @@ function App() {
                 minValue={minValue}
                 changeMaxValue={changeMaxValue}
                 changeMinValue={changeMinValue}
-                buttons={[btns.setBtn] } />
+                buttons={[btns.setBtn]} />
             <Counter
                 error={error}
                 settingsMode={settingsMode}
                 displayValue={displayValue}
                 maxValue={maxValue}
-                buttons={[ btns.incBtn, btns.resetBtn ]}
+                buttons={[btns.incBtn, btns.resetBtn]}
             />
 
         </div>
