@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import './App.css';
 import { Counter } from "./components/Counter/Counter";
+import { AppStateType, setDisplayValue, setMaxValue, setMinValue, setSettingsMode } from './redux/store';
 
 type BtnsType = {
     [key: string]: BtnType
@@ -12,10 +14,8 @@ export type BtnType = {
 }
 
 function App() {
-    const [maxValue, setMaxValue] = useState<number>(Number(localStorage.getItem("maxValue")) | 5);
-    const [minValue, setMinValue] = useState<number>(Number(localStorage.getItem("minValue")) | 0);
-    const [displayValue, setDisplayValue] = useState<number | string>(minValue);
-    const [settingsMode, setSettingsMode] = useState<boolean>(false);
+    const dispatch = useDispatch();
+    const { maxValue, minValue, displayValue, settingsMode } = useSelector((state: AppStateType) => state);
     const error = minValue >= maxValue || minValue < 0;
 
     const btns: BtnsType = {
@@ -26,31 +26,31 @@ function App() {
 
 
     function changeMaxValue(value: number) {
-        setSettingsMode(true);
-        setMaxValue(value);
+        dispatch(setSettingsMode(true))
+        dispatch(setMaxValue(value));
         localStorage.setItem("maxValue", String(value));
     }
 
     function changeMinValue(value: number) {
-        setSettingsMode(true)
-        setMinValue(value);
-        setDisplayValue(value);
+        dispatch(setSettingsMode(true));
+        dispatch(setMinValue(value));
+        dispatch(setDisplayValue(value));
         localStorage.setItem("minValue", String(value));
     }
 
     function setValues() {
-        setSettingsMode(false);
+        dispatch(setSettingsMode(false));
     }
 
     function incDisplayValue() {
         const newValue = Number(displayValue) + 1;
         if (newValue <= maxValue) {
-            setDisplayValue(newValue);
+            dispatch(setDisplayValue(newValue));
         }
     }
 
     function resetDisplayValue() {
-        setDisplayValue(minValue);
+        dispatch(setDisplayValue(minValue));
     }
 
     return (
